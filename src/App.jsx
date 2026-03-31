@@ -1,39 +1,19 @@
-import { useState } from "react";
-import axios from "axios";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./Components/Navbar";
+import FabricStructure from "./Page/FabricStructure";
+import Printer from "./Page/Printer";
+import AboutUs from "./Page/AboutUs";
 
 export default function App() {
-  const [form, setForm] = useState({
-    fabricType: "woven",
-    pattern: "geometric",
-    color: "blue",
-  });
-  const [image, setImage] = useState("");
-
-  const handleSubmit = async () => {
-    const res = await axios.post("http://localhost:5000/generate", form);
-    setImage(res.data.image);
-  };
-
   return (
-    <div className="p-6">
-      <select onChange={(e) => setForm({ ...form, fabricType: e.target.value })}>
-        <option>woven</option>
-        <option>knit</option>
-      </select>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<FabricStructure />} />
+        <Route path="/design" element={<Printer />} />
+        <Route path="/AboutUs" element={<AboutUs />} />
 
-      <select onChange={(e) => setForm({ ...form, pattern: e.target.value })}>
-        <option>geometric</option>
-        <option>floral</option>
-      </select>
-
-      <input
-        placeholder="color"
-        onChange={(e) => setForm({ ...form, color: e.target.value })}
-      />
-
-      <button onClick={handleSubmit}>Generate</button>
-
-      {image && <img src={image} alt="fabric design" />}
-    </div>
+      </Routes>
+    </BrowserRouter>
   );
 }
